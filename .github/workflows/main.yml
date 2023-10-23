@@ -1,36 +1,36 @@
-name: Build Kernel
+# name: Build Kernel
 
-on:
-  workflow_dispatch:
+# on:
+#   workflow_dispatch:
 
-jobs:
-  build-linux:
-    name: Build Kernel
-    runs-on: ubuntu-20.04
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+# jobs:
+#   build-linux:
+#     name: Build Kernel
+#     runs-on: ubuntu-20.04
+#     steps:
+#       - name: Checkout
+#         uses: actions/checkout@v4
 
-      - name: Android Kernel Build Action
-        uses: dabao1955/kernel_build_action@v1.3
-        with:
-          kernel-url: https://github.com/MiCode/Xiaomi_Kernel_OpenSource
-          kernel-dir: msm-4.19
-          branch: cepheus-q-oss
-          config: cepheus_user_defconfig
-          arch: arm64
-          aosp-gcc: true
-          aosp-clang: true
-          ksu: true
-          ksu-version: main
-          android-version: 11
-          aosp-clang-version: r383902
-          python-27: true
-          disable-lto: true
-          overlayfs: true
-          lxc: true
-          # lxc-patch: true
-          anykernel3: true
+#       - name: Android Kernel Build Action
+#         uses: dabao1955/kernel_build_action@v1.3
+#         with:
+#           kernel-url: https://github.com/MiCode/Xiaomi_Kernel_OpenSource
+#           kernel-dir: msm-4.19
+#           branch: cepheus-q-oss
+#           config: cepheus_user_defconfig
+#           arch: arm64
+#           aosp-gcc: true
+#           aosp-clang: true
+#           ksu: true
+#           ksu-version: main
+#           android-version: 11
+#           aosp-clang-version: r383902
+#           python-27: true
+#           disable-lto: true
+#           overlayfs: true
+#           lxc: true
+#           # lxc-patch: true
+#           anykernel3: true
 
 
 # name: Build Kernel
@@ -64,3 +64,35 @@ jobs:
 #           disable-lto: true
 #           overlayfs: true
 #           anykernel3: true
+
+name: Build Kernel
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-linux:
+    name: Build Kernel
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Android Kernel Build Action
+        uses: dabao1955/kernel_build_action@v1.3
+        with:
+          kernel-url: https://github.com/ahhhl/android_kernel_xiaomi_cepheus
+          kernel-dir: msm-4.19
+          branch: "13.0"
+          config: cepheus_defconfig
+          arch: arm64
+          aosp-gcc: true
+          aosp-clang: true
+          ksu: true
+          ksu-version: main
+          android-version: 13
+          aosp-clang-version: r383902
+          python-27: true
+          disable-lto: true
+          overlayfs: true
+          anykernel3: true
