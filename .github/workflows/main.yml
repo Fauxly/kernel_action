@@ -50,7 +50,7 @@ jobs:
         with:
           kernel-url: https://github.com/raystef66/android_kernel_xiaomi_cepheus
           kernel-dir: msm-4.19
-          branch: "13.0"
+          branch: "81bbdb66b43c79d06f7f991f8f826acc77bd18ec"
           config: cepheus_defconfig
           arch: arm64
           aosp-gcc: true
