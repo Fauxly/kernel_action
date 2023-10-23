@@ -14,10 +14,10 @@ jobs:
       - name: Android Kernel Build Action
         uses: dabao1955/kernel_build_action@v1.3
         with:
-          kernel-url: https://github.com/MiCode/Xiaomi_Kernel_OpenSource
+          kernel-url: https://github.com/EcrosoftXiao/kernel_xiaomi_cepheus
           kernel-dir: msm-4.19
-          branch: cepheus-q-oss
-          config: cepheus_user_defconfig
+          branch: "eleven-Q-wifi"
+          config: cepheus_defconfig
           arch: arm64
           aosp-gcc: true
           aosp-clang: true
