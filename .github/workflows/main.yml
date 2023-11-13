@@ -21,8 +21,8 @@ jobs:
           arch: arm64
           aosp-gcc: true
           aosp-clang: true
-          ksu: true
-          ksu-version: main
+          # ksu: true
+          # ksu-version: main
           android-version: 13.0
           aosp-clang-version: r416183b1
           python-27: true
