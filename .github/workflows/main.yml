@@ -14,21 +14,21 @@ jobs:
       - name: Android Kernel Build Action
         uses: dabao1955/kernel_build_action@v1.2
         with:
-          kernel-url: https://github.com/balgxmr/kernel_xiaomi_cepheus
+          kernel-url: https://github.com/raystef66/android_kernel_xiaomi_cepheus
           kernel-dir: msm-4.19
-          branch: fourteen
+          branch: "13.0"
           config: cepheus_defconfig
           arch: arm64
-          # aosp-gcc: true
+          aosp-gcc: true
           aosp-clang: true
           ksu: true
           ksu-version: main
-          android-version: 14
-          aosp-clang-version: r383902
+          android-version: 13.0
+          aosp-clang-version: r416183b1
           python-27: true
           disable-lto: true
-          overlayfs: true
-          lxc: true
+          # overlayfs: true
+          # lxc: true
           # lxc-patch: true
           anykernel3: true
 
