@@ -12,7 +12,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Android Kernel Build Action
-        uses: dabao1955/kernel_build_action@v1.3
+        uses: dabao1955/kernel_build_action@latest
         with:
           kernel-url: https://github.com/MiCode/Xiaomi_Kernel_OpenSource
           kernel-dir: msm-4.19
