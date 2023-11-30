@@ -1,97 +1,50 @@
-name: Build Kernel
+name: action_kernel
+
 
 on:
   workflow_dispatch:
 
+
 jobs:
-  build-linux:
-    name: Build Kernel
-    runs-on: ubuntu-20.04
+  build-kernel:
+    runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v3
+      - name: Download clang & kernel source
+        run: |
+          git clone https://github.com/kdrag0n/proton-clang clang --depth=1
+          git clone https://github.com/Xirudly/kernel_xiaomi_cepheus -b 14 kernel --depth=1
+          
+      - name: Build kernel
+        run: |
+          export KBUILD_BUILD_USER="ahhhl"
+          export KBUILD_BUILD_HOST="Cepheus-Kernel"
+          args="                  O=out \
+                                  ARCH=arm64 \
+                                  SUBARCH=arm64 \
+                                  CC=$GITHUB_WORKSPACE/clang/bin/clang \
+                                  CLANG_TRIPLE=aarch64-linux-gnu- \
+                                  CROSS_COMPILE=$GITHUB_WORKSPACE/clang/bin/aarch64-linux-gnu- \
+                                  CROSS_COMPILE_ARM32=$GITHUB_WORKSPACE/clang/bin/arm-linux-gnueabi- "
+          cd kernel          
+          curl -LSs "https://raw.githubusercontent.com/tiann/KernelSU/main/kernel/setup.sh" | bash -s main
+          sed -i 's/HyperOS/HyperOS-KSU/g' arch/arm64/configs/cepheus_defconfig
+          sed -i 's/# CONFIG_MODULES is not set/CONFIG_MODULES=y/g' arch/arm64/configs/cepheus_defconfig
+          echo "CONFIG_KPROBES=y" >> arch/arm64/configs/cepheus_defconfig
+          echo "CONFIG_HAVE_KPROBES=y" >> arch/arm64/configs/cepheus_defconfig
+          echo "CONFIG_KPROBE_EVENTS=y" >> arch/arm64/configs/cepheus_defconfig          
+          make ${args} cepheus_defconfig && make -j$(nproc --all) ${args}
+          
+      - name: Package kernel
+        run: |
+          cd $GITHUB_WORKSPACE
+          git clone https://github.com/Xirudly/AnyKernel3 --depth=1
+          rm -rf AnyKernel3/.git
+          cp kernel/out/arch/arm64/boot/Image.gz-dtb AnyKernel3/
+          cp kernel/out/arch/arm64/boot/dtbo.img AnyKernel3/
 
-      - name: Android Kernel Build Action
-        uses: dabao1955/kernel_build_action@v1.2
+      - name: Upload kernel
+        uses: actions/upload-artifact@v3
         with:
-          kernel-url: https://github.com/raystef66/android_kernel_xiaomi_cepheus
-          kernel-dir: msm-4.19
-          branch: "13.0"
-          config: cepheus_defconfig
-          arch: arm64
-          aosp-gcc: true
-          aosp-clang: true
-          # ksu: true
-          # ksu-version: main
-          android-version: 13.0
-          aosp-clang-version: r416183b1
-          python-27: true
-          disable-lto: true
-          # overlayfs: true
-          # lxc: true
-          # lxc-patch: true
-          anykernel3: true
-
-# name: Build Kernel
-
-# on:
-#   workflow_dispatch:
-
-# jobs:
-#   build-linux:
-#     name: Build Kernel
-#     runs-on: ubuntu-20.04
-#     steps:
-#       - name: Checkout
-#         uses: actions/checkout@v4
-
-#       - name: Android Kernel Build Action
-#         uses: dabao1955/kernel_build_action@v1.3
-#         with:
-#           kernel-url: https://github.com/raystef66/android_kernel_xiaomi_cepheus
-#           kernel-dir: msm-4.19
-#           branch: "13.0"
-#           config: cepheus_defconfig
-#           arch: arm64
-#           aosp-gcc: true
-#           aosp-clang: true
-#           ksu: true
-#           # ksu-version: main
-#           android-version: 13
-#           aosp-clang-version: r383902
-#           python-27: true
-#           disable-lto: true
-#           overlayfs: true
-#           anykernel3: true
-
-# name: Build Kernel
-
-# on:
-#   workflow_dispatch:
-
-# jobs:
-#   build-linux:
-#     name: Build Kernel
-#     runs-on: ubuntu-20.04
-#     steps:
-#       - name: Checkout
-#         uses: actions/checkout@v4
-
-#       - name: Android Kernel Build Action
-#         uses: dabao1955/kernel_build_action@v1.3
-#         with:
-#           kernel-url: https://github.com/ahhhl/android_kernel_xiaomi_cepheus
-#           kernel-dir: msm-4.19
-#           branch: "13.0"
-#           config: cepheus_defconfig
-#           arch: arm64
-#           aosp-gcc: true
-#           aosp-clang: true
-#           # ksu: true
-#           # ksu-version: main
-#           android-version: 11
-#           aosp-clang-version: r416183b1
-#           python-27: true
-#           # disable-lto: true
-#           overlayfs: true
-#           anykernel3: true
+          name: Kernel_mi9
+          path: AnyKernel3/*
