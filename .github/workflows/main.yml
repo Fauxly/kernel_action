@@ -42,7 +42,8 @@ jobs:
           rm -rf AnyKernel3/.git
           cp kernel/out/arch/arm64/boot/Image.gz-dtb AnyKernel3/
           cp kernel/out/arch/arm64/boot/dtbo.img AnyKernel3/
-
+          zip -r Kernel_mi9 *
+          
       - name: Upload kernel
         uses: actions/upload-artifact@v3
         with:
