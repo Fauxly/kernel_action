@@ -33,7 +33,7 @@ jobs:
           echo "CONFIG_KPROBES=y" >> arch/arm64/configs/vendor/unicorn_defconfig
           echo "CONFIG_HAVE_KPROBES=y" >> arch/arm64/configs/vendor/unicorn_defconfig
           echo "CONFIG_KPROBE_EVENTS=y" >> arch/arm64/configs/vendor/unicorn_defconfig          
-          make ${args} unicorn_defconfig && make -j$(nproc --all) ${args}
+          make ${args} vendor/unicorn_defconfig && make -j$(nproc --all) ${args}
           
       - name: Package kernel
         run: |
@@ -41,7 +41,7 @@ jobs:
           git clone https://github.com/Xirudly/AnyKernel3 --depth=1
           rm -rf AnyKernel3/.git
           cp kernel/out/arch/arm64/boot/Image.gz AnyKernel3/
-          zip -r Kernel_mi9 AnyKernel3/
+          zip -r Kernel_12spro AnyKernel3/
           
       - name: Upload kernel
         uses: actions/upload-artifact@v3
