@@ -13,12 +13,12 @@ jobs:
       - name: Download clang & kernel source
         run: |
           git clone https://github.com/kdrag0n/proton-clang clang --depth=1
-          git clone https://github.com/Xirudly/kernel_xiaomi_cepheus -b 14 kernel --depth=1
+          git clone https://github.com/Fauxly/android_kernel_xiaomi_sm8475 -b lts kernel --depth=1
           
       - name: Build kernel
         run: |
-          export KBUILD_BUILD_USER="ahhhl"
-          export KBUILD_BUILD_HOST="Cepheus-Kernel"
+          export KBUILD_BUILD_USER="Fauxly"
+          export KBUILD_BUILD_HOST="Unicorn-Kernel"
           args="                  O=out \
                                   ARCH=arm64 \
                                   SUBARCH=arm64 \
@@ -28,26 +28,25 @@ jobs:
                                   CROSS_COMPILE_ARM32=$GITHUB_WORKSPACE/clang/bin/arm-linux-gnueabi- "
           cd kernel          
           curl -LSs "https://raw.githubusercontent.com/tiann/KernelSU/main/kernel/setup.sh" | bash -s main
-          sed -i 's/HyperOS/HyperOS-KSU/g' arch/arm64/configs/cepheus_defconfig
-          sed -i 's/# CONFIG_MODULES is not set/CONFIG_MODULES=y/g' arch/arm64/configs/cepheus_defconfig
-          echo "CONFIG_KPROBES=y" >> arch/arm64/configs/cepheus_defconfig
-          echo "CONFIG_HAVE_KPROBES=y" >> arch/arm64/configs/cepheus_defconfig
-          echo "CONFIG_KPROBE_EVENTS=y" >> arch/arm64/configs/cepheus_defconfig          
-          make ${args} cepheus_defconfig && make -j$(nproc --all) ${args}
+          sed -i 's/HyperOS/HyperOS-KSU/g' arch/arm64/configs/vendor/unicorn_defconfig
+          sed -i 's/# CONFIG_MODULES is not set/CONFIG_MODULES=y/g' arch/arm64/configs/vendor/unicorn_defconfig
+          echo "CONFIG_KPROBES=y" >> arch/arm64/configs/vendor/unicorn_defconfig
+          echo "CONFIG_HAVE_KPROBES=y" >> arch/arm64/configs/vendor/unicorn_defconfig
+          echo "CONFIG_KPROBE_EVENTS=y" >> arch/arm64/configs/vendor/unicorn_defconfig          
+          make ${args} unicorn_defconfig && make -j$(nproc --all) ${args}
           
       - name: Package kernel
         run: |
           cd $GITHUB_WORKSPACE
           git clone https://github.com/Xirudly/AnyKernel3 --depth=1
           rm -rf AnyKernel3/.git
-          cp kernel/out/arch/arm64/boot/Image.gz-dtb AnyKernel3/
-          cp kernel/out/arch/arm64/boot/dtbo.img AnyKernel3/
+          cp kernel/out/arch/arm64/boot/Image.gz AnyKernel3/
           zip -r Kernel_mi9 AnyKernel3/
           
       - name: Upload kernel
         uses: actions/upload-artifact@v3
         with:
-          name: Kernel_mi9
+          name: Kernel_12spro
           path: AnyKernel3/*
       - name: Release
         uses: "marvinpinto/action-automatic-releases@latest"
@@ -56,4 +55,4 @@ jobs:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
           prerelease: false
           files: |
-            ./Kernel_mi9.zip
+            ./Kernel_12spro.zip
