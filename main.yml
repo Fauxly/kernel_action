@@ -6,7 +6,7 @@ on:
 jobs:
   build-linux:
     name: Build Kernel
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -14,9 +14,9 @@ jobs:
       - name: Android Kernel Build Action
         uses: dabao1955/kernel_build_action@v1.3
         with:
-          kernel-url: https://github.com/raystef66/android_kernel_xiaomi_cepheus
-          branch: 13.0
-          config: cepheus_defconfig
+          kernel-url: https://github.com/Fauxly/android_kernel_xiaomi_sm8475
+          branch: lts
+          config: unicorn_defconfig
           arch: arm64
           aosp-gcc: true
           aosp-clang: true
