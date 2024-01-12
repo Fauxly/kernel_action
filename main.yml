@@ -16,7 +16,7 @@ jobs:
         with:
           kernel-url: https://github.com/Fauxly/android_kernel_xiaomi_sm8475
           branch: lts
-          config: unicorn_defconfig
+          config: vendor/unicorn_defconfig
           arch: arm64
           aosp-gcc: true
           aosp-clang: true
